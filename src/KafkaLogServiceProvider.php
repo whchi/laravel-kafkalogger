@@ -13,7 +13,7 @@ class KafkaLogServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([__DIR__ . '/../config/kafkalogger.php'], 'config');
+        $this->publishes([__DIR__ . '/../config/kafkalogger.php', config_path('kafkalogger.php')], 'config');
     }
 
     /**

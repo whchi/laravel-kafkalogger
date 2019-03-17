@@ -35,7 +35,7 @@ class Formatter extends \Monolog\Formatter\NormalizerFormatter
         $this->hostname = php_uname('n');
         $this->extraPrefix = 'extra_';
         $this->contextPrefix = 'ctx_';
-        $this->type = preg_replace('/(http:\/\/)|(https:\/\/)/i', '', env('APP_URL'));
+        $this->type = preg_replace('/(http:\/\/)|(https:\/\/)/i', '', config('app.url'));
     }
     /**
      * {@inheritdoc}

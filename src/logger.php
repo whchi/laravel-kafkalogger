@@ -16,7 +16,8 @@ class Logger extends AbstractProcessingHandler
     {
         $config = \Kafka\ProducerConfig::getInstance();
         $config->setMetadataRefreshIntervalMs(10000);
-        $config->setMetadataBrokerList(env('KAFKA_HOST', '127.0.0.1:9092'));
+
+        $config->setMetadataBrokerList(config('kafkalogger.host'));
         $config->setBrokerVersion('2.1.0');
         $config->setRequiredAck(1);
         $config->setIsAsyn(false);
@@ -24,7 +25,7 @@ class Logger extends AbstractProcessingHandler
         $producer = new \Kafka\Producer();
         $producer->send([
             [
-                'topic' => env('KAFKA_TOPIC', 'logstash'),
+                'topic' => config('kafkalogger.topic'),
                 'value' => $record['formatted'],
                 'key' => '',
             ],
