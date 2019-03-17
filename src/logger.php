@@ -16,7 +16,6 @@ class Logger extends AbstractProcessingHandler
     {
         $config = \Kafka\ProducerConfig::getInstance();
         $config->setMetadataRefreshIntervalMs(10000);
-
         $config->setMetadataBrokerList(config('kafkalogger.host'));
         $config->setBrokerVersion('2.1.0');
         $config->setRequiredAck(1);

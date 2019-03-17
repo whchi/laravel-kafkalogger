@@ -13,7 +13,13 @@ class KafkaLogServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([__DIR__ . '/../config/kafkalogger.php', config_path('kafkalogger.php')], 'config');
+        $source = realpath($raw = __DIR__ . '/../config/kafkalogger.php') ?: $raw;
+
+        if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
+            $this->publishes([$source => config_path('kafkalogger.php')]);
+        }
+        $this->mergeConfigFrom($source, 'kafkalogger');
+
     }
 
     /**
