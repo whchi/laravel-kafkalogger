@@ -1,0 +1,24 @@
+{
+  "name": "cw/kafkalogger",
+  "description": "send log direct into kafka",
+  "version": "0.0.1",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "DylanChi",
+      "email": "dylanchi@cw.com.tw"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.1",
+    "laravel/framework": "5.5.*",
+    "nmred/kafka-php": "v0.2.0.8"
+  },
+  "autoload": {
+    "psr-4": {
+      "Cw\\KafkaLogger\\": "src/"
+    }
+  }
+}
