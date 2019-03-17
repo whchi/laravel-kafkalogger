@@ -2,6 +2,7 @@
 
 namespace Cw\KafkaLogger;
 
+use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\ServiceProvider;
 
 class KafkaLogServiceProvider extends ServiceProvider
@@ -14,7 +15,6 @@ class KafkaLogServiceProvider extends ServiceProvider
     public function boot()
     {
         $source = realpath($raw = __DIR__ . '/../config/kafkalogger.php') ?: $raw;
-
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
             $this->publishes([$source => config_path('kafkalogger.php')]);
         }
