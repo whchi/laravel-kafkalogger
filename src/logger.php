@@ -22,14 +22,15 @@ class Logger extends AbstractProcessingHandler
         $config->setIsAsyn(false);
         $config->setProduceInterval(500);
         $producer = new \Kafka\Producer();
-        $producer->send([
+        $producer->send(
             [
-                'topic' => config('kafkalogger.topic'),
-                'value' => $record['formatted'],
-                'key' => '',
-            ],
-        ]);
-
+                [
+                    'topic' => config('kafkalogger.topic'),
+                    'value' => $record['formatted'],
+                    'key' => '',
+                ],
+            ]
+        );
     }
 
     protected function getDefaultFormatter()

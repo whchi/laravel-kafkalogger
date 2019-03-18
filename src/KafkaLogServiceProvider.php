@@ -1,5 +1,4 @@
 <?php
-
 namespace Cw\KafkaLogger;
 
 use Illuminate\Foundation\Application as LaravelApplication;
@@ -29,8 +28,10 @@ class KafkaLogServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->configureMonologUsing(function ($monolog) {
-            $monolog->pushHandler(new Logger);
-        });
+        $this->app->configureMonologUsing(
+            function ($monolog) {
+                $monolog->pushHandler(new Logger);
+            }
+        );
     }
 }
