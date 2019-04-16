@@ -21,4 +21,4 @@ Cw\KafkaLogger\KafkaLogServiceProvider::class,
 ```bash 
 php artisan vendor:publish --provider="Cw\KafkaLogger\KafkaLogServiceProvider"
 ```
-5. set host & topic
+5. set host & topic in config/kafkalogger.php
