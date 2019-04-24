@@ -4,7 +4,7 @@ namespace Cw\KafkaLogger;
 
 use Monolog\Handler\AbstractProcessingHandler;
 
-class Logger extends AbstractProcessingHandler
+class KafkaLogger extends AbstractProcessingHandler
 {
     private $config;
 

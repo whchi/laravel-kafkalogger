@@ -14,8 +14,10 @@ class KafkaLogServiceProvider extends ServiceProvider
     public function boot()
     {
         $source = realpath($raw = __DIR__ . '/../config/kafkalogger.php') ?: $raw;
+        $app = realpath($raw = __DIR__ . '/app') ?: $raw;
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
             $this->publishes([$source => config_path('kafkalogger.php')]);
+            $this->publishes([$app => app_path()]);
         }
         $this->mergeConfigFrom($source, 'kafkalogger');
 
@@ -28,9 +30,9 @@ class KafkaLogServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->configureMonologUsing(
-            function ($monolog) {
-                $monolog->pushHandler(new Logger);
+        $this->app->bind(
+            'KafkaLogger', function ($app) {
+                return new KafkaLogger;
             }
         );
     }
