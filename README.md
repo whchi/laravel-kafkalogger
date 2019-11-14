@@ -9,7 +9,7 @@ composer require whchi/kafkalogger "0.0.1"
 ```
 2. publish vendor
 ```bash
-php artisan vendor:publish --provider="Cw\KafkaLogger\KafkaLogServiceProvider"
+php artisan vendor:publish --provider="Whchi\KafkaLogger\KafkaLogServiceProvider"
 ```
 ### log settings
 * in `config/logging.php` add
@@ -41,5 +41,5 @@ class KafkaHandler
 ```
 * edit `.env`
 ```bash
-LOG_CHANNEL=kafka # 本地開發不想連 kafka 時設定為 stack
+LOG_CHANNEL=kafka
 ```
