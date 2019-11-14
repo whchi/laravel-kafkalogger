@@ -1,4 +1,4 @@
-在 Laravel 裡使用 Log Facade 的直接送到 kafka
+在 Laravel 裡使用 Log Facade 的直接送到 kafka, ELK format
 ## 安裝步驟
 1. composer
 ```bash
