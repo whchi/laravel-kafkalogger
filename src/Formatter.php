@@ -10,7 +10,6 @@
 namespace Whchi\KafkaLogger;
 
 use DateTime;
-use Exception;
 use InvalidArgumentException;
 use Monolog\Formatter\NormalizerFormatter;
 use Throwable;
@@ -100,9 +99,8 @@ class Formatter extends NormalizerFormatter
 
     protected function normalizeException(Throwable $e, int $depth = 0)
     {
-        // TODO 2.0 only check for Throwable
-        if (!$e instanceof Exception && !$e instanceof Throwable) {
-            throw new InvalidArgumentException('Exception/Throwable expected, got ' . gettype($e) . ' / ' . get_class($e));
+        if (!$e instanceof Throwable) {
+            throw new InvalidArgumentException('Throwable expected, got ' . gettype($e) . ' / ' . get_class($e));
         }
 
         $previousText = '';
