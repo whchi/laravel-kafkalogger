@@ -1,5 +1,4 @@
-<?php
-declare (strict_types = 1);
+<?php declare (strict_types = 1);
 /*
  * This file is part of the Monolog package.
  *
@@ -11,23 +10,29 @@ declare (strict_types = 1);
 namespace Cw\KafkaLogger;
 
 use DateTime;
+use Exception;
+use InvalidArgumentException;
+use Monolog\Formatter\NormalizerFormatter;
+use Throwable;
 
 /**
  * Format a log message into an Elasticsearch record
  *
  * @author Avtandil Kikabidze <akalongman@gmail.com>
  */
-class Formatter extends \Monolog\Formatter\NormalizerFormatter
+class Formatter extends NormalizerFormatter
 {
-    private $hostname;
-    private $extraPrefix;
-    private $contextPrefix;
+    protected $hostname;
+    protected $extraPrefix;
+    protected $contextPrefix;
+    protected $includeStacktraces;
+
     /**
      * elk fields.type
      *
      * @var [string]
      */
-    private $type;
+    protected $type;
     public function __construct()
     {
         // Elasticsearch requires an ISO 8601 format date with optional millisecond precision.
@@ -37,17 +42,18 @@ class Formatter extends \Monolog\Formatter\NormalizerFormatter
         $this->contextPrefix = 'ctx_';
         $this->type = preg_replace('/(http:\/\/)|(https:\/\/)/i', '', config('app.url'));
     }
+
     /**
      * {@inheritdoc}
      */
-    public function format(array $record)
+    public function format(array $record): string
     {
         $record = parent::format($record);
         $record = $this->formatToELKLogStash($record);
         return $this->toJson($record);
     }
 
-    protected function formatToELKLogStash(array $record)
+    protected function formatToELKLogStash(array $record): array
     {
         if (empty($record['datetime'])) {
             $record['datetime'] = gmdate('c');
@@ -91,4 +97,27 @@ class Formatter extends \Monolog\Formatter\NormalizerFormatter
         }
         return $message;
     }
+
+    protected function normalizeException(Throwable $e, int $depth = 0)
+    {
+        // TODO 2.0 only check for Throwable
+        if (!$e instanceof Exception && !$e instanceof Throwable) {
+            throw new InvalidArgumentException('Exception/Throwable expected, got ' . gettype($e) . ' / ' . get_class($e));
+        }
+
+        $previousText = '';
+        if ($previous = $e->getPrevious()) {
+            do {
+                $previousText .= ', ' . get_class($previous) . '(code: ' . $previous->getCode() . '): ' . $previous->getMessage() . ' at ' . $previous->getFile() . ':' . $previous->getLine();
+            } while ($previous = $previous->getPrevious());
+        }
+
+        $str = '[object] (' . get_class($e) . '(code: ' . $e->getCode() . '): ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine() . $previousText . ')';
+        if ($this->includeStacktraces) {
+            $str .= "\n[stacktrace]\n" . $e->getTraceAsString() . "\n";
+        }
+
+        return $str;
+    }
+
 }

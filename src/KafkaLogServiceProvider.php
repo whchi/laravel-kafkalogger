@@ -1,6 +1,7 @@
 <?php
 namespace Cw\KafkaLogger;
 
+use Cw\KafkaLogger\Logger;
 use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,13 +15,10 @@ class KafkaLogServiceProvider extends ServiceProvider
     public function boot()
     {
         $source = realpath($raw = __DIR__ . '/../config/kafkalogger.php') ?: $raw;
-        $app = realpath($raw = __DIR__ . '/app') ?: $raw;
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
             $this->publishes([$source => config_path('kafkalogger.php')]);
-            $this->publishes([$app => app_path()]);
         }
         $this->mergeConfigFrom($source, 'kafkalogger');
-
     }
 
     /**
@@ -30,10 +28,6 @@ class KafkaLogServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(
-            'KafkaLogger', function ($app) {
-                return new KafkaLogger;
-            }
-        );
+        $this->app->bind('KafkaLogger', Logger::class);
     }
 }

@@ -1,46 +1,45 @@
-使用 Log Facade 的直接送到 kafka
+# 使用 Log Facade 的直接送到 kafka
 
-### 安裝步驟
-1. setup repo uri
+## Requirements
+laravel 6
+## 安裝步驟
+1. composer
 ```bash
-composer config repositories.kafkalogger vcs git@ssh.dev.azure.com:v3/cwgroup/digital-products/kafkalogger
+composer require whchi/kafkalogger "0.0.1"
 ```
-2. require package
-```bash
-# Laravel 5.5
-composer require cw/kafkalogger "1.0.*"
-# Laravel 5.8
-composer require cw/kafkalogger "dev-master"
-```
-3. vim
-```bash
-config/app.php
-```
-add ServiceProvider
-```text
-Cw\KafkaLogger\KafkaLogServiceProvider::class,
-```
-4. publish vendor
+2. publish vendor
 ```bash
 php artisan vendor:publish --provider="Cw\KafkaLogger\KafkaLogServiceProvider"
 ```
-**In dev-master version this command will create a file at `app/Logging/Kafka.php`**
-
-5. set host & topic in config/kafkalogger.php
-
-### Laravel 5.8 log settings
-in `config/logging.php` add
+### log settings
+* in `config/logging.php` add
 ```php
     'channels' => [
         ...
-        'custom' => [
+        'kafka' => [
             'driver' => 'custom',
-            'via' => \App\Logging\Kafka::class,
+            'via' => \App\Logging\KafkaHandler::class,
         ],
         ...
     ]
 ```
-edit `.env`
+* add file `app/Logging/KafkaHandler.php`
+```php
+namespace App\Logging;
+
+use Monolog\Logger;
+
+class KafkaHandler
+{
+    public function __invoke()
+    {
+        $logger = new Logger('custom');
+        $logger->pushHandler(resolve('KafkaLogger'));
+        return $logger;
+    }
+}
+```
+* edit `.env`
 ```bash
-LOG_CHANNEL=custom
+LOG_CHANNEL=kafka # 本地開發不想連 kafka 時設定為 stack
 ```

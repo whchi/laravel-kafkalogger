@@ -1,17 +1,20 @@
-<?php
+<?php declare (strict_types = 1);
 
 namespace Cw\KafkaLogger;
 
+use Kafka\Producer;
+use Kafka\ProducerConfig;
+use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\AbstractProcessingHandler;
 
-class KafkaLogger extends AbstractProcessingHandler
+class Logger extends AbstractProcessingHandler
 {
-    private $config;
+    protected $config;
 
     public function __construct()
     {
         $this->bubble = false;
-        $this->config = \Kafka\ProducerConfig::getInstance();
+        $this->config = ProducerConfig::getInstance();
         $this->config->setMetadataRefreshIntervalMs(10000);
         $this->config->setMetadataBrokerList(config('kafkalogger.host'));
         $this->config->setBrokerVersion('2.1.0');
@@ -20,10 +23,9 @@ class KafkaLogger extends AbstractProcessingHandler
         $this->config->setProduceInterval(500);
     }
 
-    protected function write(array $record)
+    protected function write(array $record): void
     {
-
-        $producer = new \Kafka\Producer();
+        $producer = new Producer;
         $producer->send(
             [
                 [
@@ -35,7 +37,7 @@ class KafkaLogger extends AbstractProcessingHandler
         );
     }
 
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new Formatter;
     }
