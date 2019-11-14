@@ -1,11 +1,8 @@
-# 使用 Log Facade 的直接送到 kafka
-
-## Requirements
-laravel 6
+在 Laravel 裡使用 Log Facade 的直接送到 kafka
 ## 安裝步驟
 1. composer
 ```bash
-composer require whchi/kafkalogger "0.0.1"
+composer require whchi/laravel-kafkalogger "0.0.1"
 ```
 2. publish vendor
 ```bash

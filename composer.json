@@ -1,6 +1,6 @@
 {
-  "name": "whchi/kafkalogger",
-  "description": "send log direct into kafka",
+  "name": "whchi/laravel-kafkalogger",
+  "description": "send log direct into kafka via laravel",
   "type": "library",
   "license": "MIT",
   "authors": [
