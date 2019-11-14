@@ -1,7 +1,7 @@
 <?php
-namespace Cw\KafkaLogger;
+namespace Whchi\KafkaLogger;
 
-use Cw\KafkaLogger\Logger;
+use Whchi\KafkaLogger\Logger;
 use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\ServiceProvider;
 

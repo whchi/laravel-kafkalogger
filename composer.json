@@ -16,13 +16,13 @@
   },
   "autoload": {
     "psr-4": {
-      "Cw\\KafkaLogger\\": "src/"
+      "Whchi\\KafkaLogger\\": "src/"
     }
   },
   "extra": {
       "laravel":{
           "providers":[
-              "Cw\\KafkaLogger\\KafkaLogServiceProvider"
+              "Whchi\\KafkaLogger\\KafkaLogServiceProvider"
           ]
       }
   }
